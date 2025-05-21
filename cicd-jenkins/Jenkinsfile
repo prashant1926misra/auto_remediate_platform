@@ -2,25 +2,27 @@ pipeline {
   agent any
 
   environment {
-    PROJECT_ID = 'plasma-hope-457211-d7'     
+    PROJECT_ID = 'your-gcp-project-id'  
     IMAGE_NAME = 'flask-app'
-    IMAGE_TAG  = '1.0'
+    IMAGE_TAG  = 'v1'
     GCR_IMAGE  = "gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${IMAGE_TAG}"
   }
 
   stages {
+ 
     stage('Build Docker Image') {
       steps {
-        script {
-          sh "docker build -t ${GCR_IMAGE} ."
+        dir('auto_remediate_platform/cicd-jenkins/') {
+            script {
+                sh "docker build -t ${GCR_IMAGE} ."
+            }
         }
-      }
+     }
     }
 
     stage('GCloud Auth') {
       steps {
         script {
-          // Auth with GCP if needed (skip if already authenticated)
           sh 'gcloud auth configure-docker --quiet'
         }
       }
@@ -43,3 +45,4 @@ pipeline {
     }
   }
 }
+
