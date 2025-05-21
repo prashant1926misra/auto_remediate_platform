@@ -1,0 +1,45 @@
+pipeline {
+  agent any
+
+  environment {
+    PROJECT_ID = 'plasma-hope-457211-d7'     
+    IMAGE_NAME = 'flask-app'
+    IMAGE_TAG  = '1.0'
+    GCR_IMAGE  = "gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${IMAGE_TAG}"
+  }
+
+  stages {
+    stage('Build Docker Image') {
+      steps {
+        script {
+          sh "docker build -t ${GCR_IMAGE} ."
+        }
+      }
+    }
+
+    stage('GCloud Auth') {
+      steps {
+        script {
+          // Auth with GCP if needed (skip if already authenticated)
+          sh 'gcloud auth configure-docker --quiet'
+        }
+      }
+    }
+
+    stage('Push to GCR') {
+      steps {
+        script {
+          sh "docker push ${GCR_IMAGE}"
+        }
+      }
+    }
+
+    stage('Verify Push') {
+      steps {
+        script {
+          sh "gcloud container images list-tags gcr.io/${PROJECT_ID}/${IMAGE_NAME} --limit=1"
+        }
+      }
+    }
+  }
+}
