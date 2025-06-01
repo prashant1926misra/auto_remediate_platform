@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: gcr.io/plasma-hope-457211-d7 /flask-app:1.0
+          image: gcr.io/plasma-hope-457211-d7/flask-app:1.0
           ports:
             - containerPort: 5000
           envFrom:
