@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: app-alert-rules
+  labels:
+    release: prom-stack               
+spec:
+  groups:
+    - name: app.rules
+      rules:
+        - alert: HighPodCPUUsage
+          expr: |
+            sum(rate(container_cpu_usage_seconds_total{container!="", pod!=""}[5m])) 
+            by (pod) > 0.8
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage on pod {{ $labels.pod }}"
+            description: "Pod {{ $labels.pod }} is using more than 80% CPU for more than 2 minutes."
+
+        - alert: PodRestartCountHigh
+          expr: |
+            increase(kube_pod_container_status_restarts_total[10m]) > 3
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High pod restart count"
+            description: "Pod {{ $labels.pod }} restarted more than 3 times in the last 10 minutes."
