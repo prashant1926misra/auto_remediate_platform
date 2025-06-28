@@ -9,6 +9,7 @@ spec:
   containers:
     - name: stress
       image: polinux/stress
+      command: ["stress"]
       args: ["--cpu", "1", "--timeout", "600s"]
       resources:
         limits:
