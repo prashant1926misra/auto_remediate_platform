@@ -10,3 +10,4 @@ resources:
   - hpa.yaml
   - ingress.yaml
   - prometheus-rules.yaml
+  - flask-pdb.yaml
