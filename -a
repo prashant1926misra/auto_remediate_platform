@@ -1,0 +1,125 @@
+[33mcommit 284928c02a39d8650d58b44e31a37fbc3e643495[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/1.0[m[33m, [m[1;31morigin/feature/1.0[m[33m)[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 21 12:36:58 2025 +0000
+
+    update service.yaml | add prometheus annotations
+
+[33mcommit 518100515ccfa1513d520b1726c1a6f852b24cd7[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 21 07:41:42 2025 +0000
+
+    update requirements.txt
+
+[33mcommit fd85de69bb76cb4d5da58d7d4ca6ec91575d360d[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 21 07:36:09 2025 +0000
+
+    update app.py
+
+[33mcommit 18f3059db2405a8c7937ef1c020033b96457aeaa[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 7 12:20:43 2025 +0000
+
+    k8s files | kustomization.yaml updated
+
+[33mcommit ebc24fc096d7e934ed973645fee2c5e4bb525257[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 7 12:03:34 2025 +0000
+
+    k8s files | ingress.yaml created
+
+[33mcommit 31b2858759315cc96525f950b92bc324eece60cb[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat Jun 7 04:32:02 2025 +0000
+
+    k8s files | kustomization.yaml created in the base
+
+[33mcommit 86a95cb478224593ff7cc16fa519b6900307cbc4[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Tue Jun 3 15:01:17 2025 +0000
+
+    k8s files | kustomization.yaml created for dev and prod env.
+
+[33mcommit a54eff6f6471ce61470a68edf0a46bf541c53ca8[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Tue Jun 3 10:39:41 2025 +0000
+
+    k8s files | hpa.yaml created
+
+[33mcommit a01f1c65e540d1f4de032cde163c4a65eeeb2833[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Tue Jun 3 07:08:16 2025 +0000
+
+    k8s files | service.yaml created
+
+[33mcommit 0a4d5ef6be5bf9778fc8becb8382931a9e0561b3[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Tue Jun 3 04:54:22 2025 +0000
+
+    k8s files | secret.yaml created
+
+[33mcommit 162f30e136bcd8cac3ba361d18bf9b9215ec3929[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sun Jun 1 14:30:09 2025 +0000
+
+    k8s files | deployment.yaml edited
+
+[33mcommit e433cb52e7ea076abb325fe2fb243d49f914ce17[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sun Jun 1 14:04:26 2025 +0000
+
+    k8s files | app verion updated in deployment.yaml
+
+[33mcommit 0a929afa225873cd51a03c63c2d423f85b280fcb[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat May 31 06:15:12 2025 +0000
+
+    k8s files | configmap.yaml created
+
+[33mcommit 767a300f52c89a0cc028cc0e68dcb18eb730f7b5[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat May 31 05:05:13 2025 +0000
+
+    k8s files | service.yaml created
+
+[33mcommit 926bcee8e5a89987abc1ac1c88db8c8a0eddea8e[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Sat May 31 04:25:41 2025 +0000
+
+    k8s files | deployment.yaml created
+
+[33mcommit 2fc82e0c969e1302c916c783518b129528676f77[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 14:40:58 2025 +0000
+
+    Jenkinsfile updated | Dockerfile path updated
+
+[33mcommit 24e8b09b82e870b9ab5b90a4582a8dc7e71f08b8[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 10:52:24 2025 +0000
+
+    Jenkinsfile created
+
+[33mcommit cfbb8c2d4d88b3d5882299253782546aed28a168[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 09:53:06 2025 +0000
+
+    Dockerfile added
+
+[33mcommit cd6fd93a8678fe11ece41120c59c793afc148837[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 08:15:44 2025 +0000
+
+    added app.py & requirements.txt
+
+[33mcommit 55e0ca8ef502ef5b8775105856586162b4aa7424[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 08:03:49 2025 +0000
+
+    removed the initial test file
+
+[33mcommit 03f1693cc78e9ca759f4028af48a2e1b462e4bd5[m
+Author: prashant1926misra <prashant2611misra@gmail.com>
+Date:   Wed May 21 08:00:30 2025 +0000
+
+    checking initial commit
