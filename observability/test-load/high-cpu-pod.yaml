@@ -10,9 +10,9 @@ spec:
     - name: stress
       image: polinux/stress
       command: ["stress"]
-      args: ["--cpu", "1", "--timeout", "600s"]
+      args: ["--cpu", "4", "--timeout", "600s"]
       resources:
         limits:
-          cpu: "0.5"
+          cpu: "2"
         requests:
-          cpu: "0.5"
+          cpu: "1"
