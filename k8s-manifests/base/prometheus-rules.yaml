@@ -3,21 +3,21 @@ kind: PrometheusRule
 metadata:
   name: app-alert-rules
   labels:
-    release: prom-stack               
+    release: prom-stack
 spec:
   groups:
     - name: app.rules
       rules:
         - alert: HighPodCPUUsage
           expr: |
-            sum(rate(container_cpu_usage_seconds_total{container!="", pod!=""}[5m])) 
-            by (pod) > 0.8
-          for: 2m
+            sum(rate(container_cpu_usage_seconds_total{pod=~".*cpu-stress.*", container!="", container!="POD"}[1m]))
+            by (pod) > 0.01
+          for: 30s
           labels:
             severity: warning
           annotations:
             summary: "High CPU usage on pod {{ $labels.pod }}"
-            description: "Pod {{ $labels.pod }} is using more than 80% CPU for more than 2 minutes."
+            description: "Pod {{ $labels.pod }} is using more than 1% CPU for 30 seconds (for test)."
 
         - alert: PodRestartCountHigh
           expr: |
