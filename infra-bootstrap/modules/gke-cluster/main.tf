@@ -5,7 +5,7 @@ resource "google_container_cluster" "gke_cluster" {
   enable_shielded_nodes    = "true"
   remove_default_node_pool = true
   initial_node_count       = 1
-  disk_size_gb             = var.diskSize
+ # disk_size_gb             = var.diskSize
 
   release_channel {
     channel = "STABLE"
@@ -57,6 +57,7 @@ resource "google_container_node_pool" "primary_nodes" {
   node_config {
     preemptible  = true
     machine_type = var.machineType
+    disk_size_gb = var.diskSize
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/compute",
