@@ -25,7 +25,7 @@ This project provides a complete, production-ready blueprint that brings togethe
 | **Phase 1** | Provision secure & scalable GKE infrastructure using Terraform |
 | **Phase 2** | Automate Docker builds and CI/CD pipelines via Jenkins |
 | **Phase 3** | Deploy app to Kubernetes with full environment isolation using Kustomize |
-| **Phase 4** | Add observability, alerting, and self-healing to meet SRE standards |
+| **Phase 4** | Add observability, alerting, and self-healing to improve reliability and reduce downtime |
 
 
 ##  Tools & Technologies
