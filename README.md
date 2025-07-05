@@ -39,7 +39,9 @@ This project provides a complete, production-ready blueprint that brings togethe
 
 
 ##  Architecture Diagram
-![file_0000000048ec61f9b8a84ee39f388bbd](https://github.com/user-attachments/assets/c9c16b8a-9313-48fd-9fb5-c6f52ec10c27)
+![image](https://github.com/user-attachments/assets/a388b148-9fad-4e01-ba4e-6b19c2611317)
+
+
 
 
 ##  Project Structure
