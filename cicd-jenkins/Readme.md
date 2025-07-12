@@ -12,7 +12,3 @@ Push the built Docker image to the specified Artifact Registry with retry logic.
 
 **Verify Push**  
 Confirm that the image exists in Artifact Registry by listing the latest entries.
-
-## Output
-- Docker image of the Flask app built and pushed to Google Artifact Registry
-- Jenkins pipeline with clean environment, retry logic, and verification step
