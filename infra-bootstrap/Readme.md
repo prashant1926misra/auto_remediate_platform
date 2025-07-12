@@ -1,0 +1,1 @@
+This phase sets up the foundational infrastructure on GCP using Terraform. It provisions a production-ready GKE cluster along with VPC networking, firewall rules, IAM roles, and other essentials required for future CI/CD and application deployment steps.
