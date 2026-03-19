@@ -1,10 +1,7 @@
-module "gke-cluster" {
-    source = "./modules/gke-cluster"
+module "gke_cluster" {
+  source       = "./modules/gke-cluster"  
 
-    region       = var.region
-    clusterName  = var.clusterName
-    diskSize     = var.diskSize
-    minNode      = var.minNode
-    maxNode      = var.maxNode
-    machineType  = var.machineType
+  project_id   = var.project_id
+  region       = var.region
+  cluster_name = var.cluster_name
 }
