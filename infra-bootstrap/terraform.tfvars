@@ -1,6 +1,3 @@
-region="us-central1-c"
-clusterName="tf-cluster"
-diskSize=50
-minNode=1
-maxNode=3
-machineType="e2-medium"
+project_id   = "project-1a158640-f68f-4265-be2"
+region       = "asia-south1"
+cluster_name = "gke-cluster"

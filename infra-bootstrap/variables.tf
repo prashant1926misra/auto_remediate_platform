@@ -1,19 +1,14 @@
+variable "project_id" {
+  description = "The ID of the GCP Project"
+  type        = string
+}
+
 variable "region" {
-  description = "Deployment region"
-  default = "us-central1"
+  description = "The primary region for the cluster"
+  type        = string
 }
-variable "clusterName" {
-  description = "Name of the Cluster"
-}
-variable "diskSize" {
-  description = "Node disk size in GB"
-}
-variable "minNode" {
-  description = "Minimum Node Count"
-}
-variable "maxNode" {
-  description = "maximum Node Count"
-}
-variable "machineType" {
-  description = "Node Instance machine type"
+
+variable "cluster_name" {
+  description = "Name for the GKE Cluster"
+  type        = string
 }
