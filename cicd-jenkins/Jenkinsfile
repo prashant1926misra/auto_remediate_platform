@@ -1,9 +1,11 @@
+
 pipeline {
   agent any
 
   options {
     timestamps()
     skipStagesAfterUnstable()
+    timeout(time: 20, unit: 'MINUTES')
   }
 
   parameters {
@@ -11,39 +13,65 @@ pipeline {
   }
 
   environment {
-    PROJECT_ID   = 'plasma-hope-457211-d7'
-    VM_ZONE      = 'us-central1-a' 
+    PROJECT_ID   = 'project-1a158640-f68f-4265-be2'
+    REGION       = 'asia-south1'
+    CLUSTER_NAME = 'gke-cluster'
     IMAGE_NAME   = 'flask-app'
+    AR_REPO      = 'docker-repo'
     TAG          = "${params.IMAGE_TAG ?: BUILD_NUMBER}"
-    AR_REGION    = 'us-central1'  
-    AR_REPO      = 'docker-repo'  
-    AR_IMAGE     = "${AR_REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${IMAGE_NAME}:${TAG}"
+    AR_IMAGE     = "${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${IMAGE_NAME}:${TAG}"
+    K8S_NAMESPACE = 'default'
+    DEPLOYMENT    = 'flask-app'
+    CONTAINER     = 'flask-app'
   }
 
   stages {
-      
-    stage('Build Docker Image') {
+
+    stage('Authenticate to GCP') {
       steps {
-        dir('auto_remediate_platform/cicd-jenkins/') {
-          sh "docker build -t ${AR_IMAGE} ."
+        withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'SA_KEY')]) {
+          sh '''
+          set +x
+          gcloud auth activate-service-account --key-file=$SA_KEY
+          gcloud config set project ${PROJECT_ID}
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev --quiet
+          set -x
+          '''
         }
       }
     }
 
-    stage('Authenticate to Artifact Registry') {
+    stage('App Sanity Check') {
       steps {
-        withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'SA_KEY')]) {
+        dir('app') {
+          sh 'python3 -m py_compile src/app.py'
+        }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        dir('app') {
           sh """
-            gcloud config set project ${PROJECT_ID}
-            gcloud config set compute/zone ${VM_ZONE}
-            gcloud auth activate-service-account --key-file=$SA_KEY
-            gcloud auth configure-docker ${AR_REGION}-docker.pkg.dev --quiet
+          docker build \
+            --pull \
+            --label git_commit=${GIT_COMMIT} \
+            --label build_number=${BUILD_NUMBER} \
+            -t ${AR_IMAGE} .
           """
         }
       }
     }
 
-    stage('Push to Artifact Registry') {
+    stage('Scan Image with Trivy') {
+      steps {
+        sh """
+        trivy image --exit-code 1 --severity HIGH,CRITICAL ${AR_IMAGE} || true
+        """
+      }
+    }
+
+    stage('Push Image to Artifact Registry') {
       steps {
         retry(2) {
           sh "docker push ${AR_IMAGE}"
@@ -51,22 +79,44 @@ pipeline {
       }
     }
 
-    stage('Verify Push') {
+    stage('Deploy to GKE') {
       steps {
-        sh "gcloud artifacts docker images list ${AR_REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${IMAGE_NAME} --limit=5"
+        sh """
+        gcloud container clusters get-credentials ${CLUSTER_NAME} \
+          --region ${REGION} \
+          --project ${PROJECT_ID}
+
+        kubectl set image deployment/${DEPLOYMENT} \
+          ${CONTAINER}=${AR_IMAGE} \
+          -n ${K8S_NAMESPACE}
+        """
       }
     }
-  }
 
-  post {
-    always {
-      cleanWs()
-    }
-    success {
-      echo "Image pushed to Artifact Registry: ${AR_IMAGE}"
-    }
-    failure {
-      echo "Pipeline failed. Check logs for details."
+    stage('Verify Rollout') {
+      steps {
+        script {
+          def status = sh(
+            script: """
+            kubectl rollout status deployment/${DEPLOYMENT} \
+              -n ${K8S_NAMESPACE} \
+              --timeout=120s
+            """,
+            returnStatus: true
+          )
+
+          if (status != 0) {
+            echo "Rollout failed. Attempting rollback..."
+
+            sh """
+            kubectl rollout undo deployment/${DEPLOYMENT} \
+              -n ${K8S_NAMESPACE}
+            """
+
+            error("Deployment failed and rollback executed.")
+          }
+        }
+      }
     }
   }
 }
