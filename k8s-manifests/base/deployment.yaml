@@ -2,19 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app
+  labels:
+    app: flask-app
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: flask-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   template:
     metadata:
       labels:
         app: flask-app
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: flask-app
-          image: gcr.io/plasma-hope-457211-d7/flask-app:1.0
+          image: gcr.io/project-1a158640-f68f-4265-be2/flask-app:1.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           envFrom:
@@ -34,6 +43,12 @@ spec:
               port: 5000
             initialDelaySeconds: 15
             periodSeconds: 20
+          startupProbe:
+            httpGet:
+              path: /
+              port: 5000
+            failureThreshold: 30
+            periodSeconds: 5
           resources:
             requests:
               memory: "128Mi"
@@ -41,3 +56,6 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
