@@ -11,3 +11,9 @@ resources:
   - ingress.yaml
   - prometheus-rules.yaml
   - flask-pdb.yaml
+
+configMapGenerator:
+  - name: flask-config
+    literals:
+      - FLASK_ENV=production
+      - LOG_LEVEL=info
