@@ -5,14 +5,34 @@ metadata:
   namespace: monitor
   labels:
     release: prom-stack
+    app: flask-app
 spec:
   selector:
     matchLabels:
       app: flask-app
+
   namespaceSelector:
     matchNames:
       - default
+
   endpoints:
     - port: http
       path: /metrics
       interval: 15s
+      scrapeTimeout: 10s
+      honorLabels: true
+
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: pod
+
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+
+        - sourceLabels: [__meta_kubernetes_service_name]
+          targetLabel: service
+
+      metricRelabelings:
+        - sourceLabels: [__name__]
+          regex: "go_.*|process_.*"
+          action: drop
