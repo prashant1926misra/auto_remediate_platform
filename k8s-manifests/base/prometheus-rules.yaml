@@ -1,30 +1,69 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: app-alert-rules
+  name: flask-app-alert-rules
   labels:
     release: prom-stack
+    app: flask-app
 spec:
   groups:
-    - name: app.rules
+    - name: flask-app.rules
       rules:
+
         - alert: HighPodCPUUsage
           expr: |
-            sum(rate(container_cpu_usage_seconds_total{pod=~".*cpu-stress.*", container!="", container!="POD"}[1m]))
-            by (pod) > 0.01
-          for: 30s
+            sum(rate(container_cpu_usage_seconds_total{
+              namespace="default",
+              pod=~"flask-app-.*",
+              container!="",
+              container!="POD"
+            }[2m])) by (pod)
+            > 0.5
+          for: 2m
           labels:
             severity: warning
           annotations:
-            summary: "High CPU usage on pod {{ $labels.pod }}"
-            description: "Pod {{ $labels.pod }} is using more than 1% CPU for 30 seconds (for test)."
+            summary: "High CPU usage on {{ $labels.pod }}"
+            description: "Pod {{ $labels.pod }} CPU usage is above 50% for 2 minutes."
+
+        - alert: HighPodCPUUsageCritical
+          expr: |
+            sum(rate(container_cpu_usage_seconds_total{
+              namespace="default",
+              pod=~"flask-app-.*",
+              container!="",
+              container!="POD"
+            }[2m])) by (pod)
+            > 0.8
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Critical CPU usage on {{ $labels.pod }}"
+            description: "Pod {{ $labels.pod }} CPU usage is above 80% for 5 minutes."
 
         - alert: PodRestartCountHigh
           expr: |
-            increase(kube_pod_container_status_restarts_total[10m]) > 3
-          for: 1m
+            increase(kube_pod_container_status_restarts_total{
+              namespace="default",
+              pod=~"flask-app-.*"
+            }[10m]) > 3
+          for: 2m
           labels:
             severity: warning
           annotations:
-            summary: "High pod restart count"
-            description: "Pod {{ $labels.pod }} restarted more than 3 times in the last 10 minutes."
+            summary: "High restart count on {{ $labels.pod }}"
+            description: "Pod {{ $labels.pod }} restarted more than 3 times in 10 minutes."
+
+        - alert: PodCrashLooping
+          expr: |
+            increase(kube_pod_container_status_restarts_total{
+              namespace="default",
+              pod=~"flask-app-.*"
+            }[5m]) > 5
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod crash looping: {{ $labels.pod }}"
+            description: "Pod {{ $labels.pod }} is likely in CrashLoopBackOff."
