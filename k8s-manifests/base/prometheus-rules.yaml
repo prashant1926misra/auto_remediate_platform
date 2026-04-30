@@ -9,7 +9,6 @@ spec:
   groups:
     - name: flask-app.rules
       rules:
-
         - alert: HighPodCPUUsage
           expr: |
             sum(rate(container_cpu_usage_seconds_total{
@@ -67,3 +66,16 @@ spec:
           annotations:
             summary: "Pod crash looping: {{ $labels.pod }}"
             description: "Pod {{ $labels.pod }} is likely in CrashLoopBackOff."
+
+        - alert: HighErrorRate
+          expr: |
+            sum(rate(flask_http_request_total{status=~"5.."}[2m]))
+            /
+            sum(rate(flask_http_request_total[2m]))
+            > 0.05
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High error rate detected"
+            description: "Error rate is above 5% for the last 2 minutes."
