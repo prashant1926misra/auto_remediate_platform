@@ -8,9 +8,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ .
 
-RUN useradd -m appuser
+RUN useradd -u 1001 -m appuser
 
-USER appuser
+USER 1001
 
 EXPOSE 5000
 
