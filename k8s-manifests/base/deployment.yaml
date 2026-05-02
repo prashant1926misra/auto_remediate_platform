@@ -22,7 +22,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: flask-app
-          image: gcr.io/project-1a158640-f68f-4265-be2/flask-app:1.0
+          image: asia-south1-docker.pkg.dev/project-1a158640-f68f-4265-be2/flask-repo/flask-app:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
