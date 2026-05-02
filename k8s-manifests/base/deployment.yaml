@@ -23,7 +23,7 @@ spec:
       containers:
         - name: flask-app
           image: asia-south1-docker.pkg.dev/project-1a158640-f68f-4265-be2/flask-repo/flask-app:1.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           envFrom:
