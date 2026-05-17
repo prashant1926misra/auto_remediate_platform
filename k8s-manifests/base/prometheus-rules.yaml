@@ -2,6 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: flask-app-alert-rules
+  namespace: default
   labels:
     release: prom-stack
     app: flask-app
@@ -69,9 +70,9 @@ spec:
 
         - alert: HighErrorRate
           expr: |
-            sum(rate(flask_http_request_total{status=~"5.."}[2m]))
+            sum(rate(flask_http_request_duration_seconds_count{status=~"5.."}[2m]))
             /
-            sum(rate(flask_http_request_total[2m]))
+            sum(rate(flask_http_request_duration_seconds_count[2m]))
             > 0.05
           for: 2m
           labels:
