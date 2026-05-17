@@ -2,10 +2,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: flask-app-alert-rules
-  #namespace: default
   labels:
     release: prom-stack
     app: flask-app
+
 spec:
   groups:
     - name: flask-app.rules
@@ -13,7 +13,7 @@ spec:
         - alert: HighPodCPUUsage
           expr: |
             sum(rate(container_cpu_usage_seconds_total{
-              namespace="default",
+              namespace="production",
               pod=~"flask-app-.*",
               container!="",
               container!="POD"
@@ -29,7 +29,7 @@ spec:
         - alert: HighPodCPUUsageCritical
           expr: |
             sum(rate(container_cpu_usage_seconds_total{
-              namespace="default",
+              namespace="production",
               pod=~"flask-app-.*",
               container!="",
               container!="POD"
@@ -45,7 +45,7 @@ spec:
         - alert: PodRestartCountHigh
           expr: |
             increase(kube_pod_container_status_restarts_total{
-              namespace="default",
+              namespace="production",
               pod=~"flask-app-.*"
             }[10m]) > 3
           for: 2m
@@ -58,7 +58,7 @@ spec:
         - alert: PodCrashLooping
           expr: |
             increase(kube_pod_container_status_restarts_total{
-              namespace="default",
+              namespace="production",
               pod=~"flask-app-.*"
             }[5m]) > 5
           for: 2m
@@ -70,9 +70,14 @@ spec:
 
         - alert: HighErrorRate
           expr: |
-            sum(rate(flask_http_request_duration_seconds_count{status=~"5.."}[2m]))
+            sum(rate(flask_http_request_duration_seconds_count{
+              namespace="production",
+              status=~"5.."
+            }[2m]))
             /
-            sum(rate(flask_http_request_duration_seconds_count[2m]))
+            sum(rate(flask_http_request_duration_seconds_count{
+              namespace="production"
+            }[2m]))
             > 0.05
           for: 2m
           labels:
@@ -84,7 +89,9 @@ spec:
         - alert: HighLatencyP95
           expr: |
             histogram_quantile(0.95,
-              sum(rate(flask_http_request_duration_seconds_bucket[2m])) by (le)
+              sum(rate(flask_http_request_duration_seconds_bucket{
+                namespace="production"
+              }[2m])) by (le)
             ) > 0.5
           for: 2m
           labels:
