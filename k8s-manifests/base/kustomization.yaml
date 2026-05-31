@@ -12,6 +12,7 @@ resources:
   - ingress.yaml
   - prometheus-rules.yaml
   - flask-pdb.yaml
+  - flask-servicemonitor.yaml
 
 configMapGenerator:
   - name: flask-config
