@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket  = "auto-rem-platform" 
+    bucket  = "auto_remediate_platform" 
     prefix  = "terraform/state"       
   }
 }
