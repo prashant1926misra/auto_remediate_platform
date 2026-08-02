@@ -28,9 +28,6 @@ resource "google_container_node_pool" "primary_nodes" {
   node_config {
     machine_type = "e2-medium"
 
-    disk_type    = "pd-standard"
-    disk_size_gb = 30
-
     service_account = "terraform-deployer@${var.project_id}.iam.gserviceaccount.com"
     
     oauth_scopes = [
