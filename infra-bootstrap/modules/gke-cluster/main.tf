@@ -3,7 +3,7 @@ resource "google_container_cluster" "primary" {
   location = var.region
   project  = var.project_id
 
-  #remove_default_node_pool = true
+  remove_default_node_pool = true
   initial_node_count       = 1
 
   network    = "default"
@@ -16,7 +16,7 @@ resource "google_container_cluster" "primary" {
     services_ipv4_cidr_block = ""
   }
 }
-/*
+
 resource "google_container_node_pool" "primary_nodes" {
   name       = "${var.cluster_name}-node-pool"
   location   = var.region
@@ -41,4 +41,3 @@ resource "google_container_node_pool" "primary_nodes" {
     preemptible  = true
   }
 }
-*/
