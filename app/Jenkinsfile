@@ -13,7 +13,7 @@ pipeline {
   }
 
   environment {
-    PROJECT_ID   = 'project-1a158640-f68f-4265-be2'
+    PROJECT_ID   = 'master-project-504311'
     REGION       = 'asia-south1'
     CLUSTER_NAME = 'gke-cluster'
     IMAGE_NAME   = 'flask-app'
