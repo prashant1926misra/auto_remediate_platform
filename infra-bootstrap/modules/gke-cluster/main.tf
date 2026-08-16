@@ -29,13 +29,14 @@ resource "google_container_node_pool" "primary_nodes" {
   cluster    = google_container_cluster.primary.name
   node_locations = var.node_locations
   project    = var.project_id
+
   node_count = 1
 
   node_config {
-    machine_type = "e2-small"
+    machine_type = "e2-standard-4"
 
-    disk_type    = "pd-standard"
-    disk_size_gb = 20
+    disk_type    = "pd-balanced"
+    disk_size_gb = 50
 
     service_account = "terraform-deployer@${var.project_id}.iam.gserviceaccount.com"
     
@@ -47,6 +48,6 @@ resource "google_container_node_pool" "primary_nodes" {
       env = "prod"
     }
 
-    preemptible  = true
+    preemptible  = false
   }
 }
